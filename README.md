@@ -11,7 +11,7 @@
 
 ## Overview
 
-**ZkPass Core** is a privacy-preserving allowlist access dApp built on the Midnight blockchain using Compact zero-knowledge smart contracts. It allows users to prove valid membership in a restricted allowlist, membership tier, or eligibility registry without revealing their real-world identity, secret credential, wallet address, or position in the allowlist. This repository represents our submission for the Midnight **"New Moon to Full" Level 3 (First Quarter)** hackathon track.
+**ZkPass Core** is a privacy-preserving allowlist access dApp built on the Midnight blockchain using Compact zero-knowledge smart contracts. It allows users to prove valid membership in a restricted allowlist, membership tier, or eligibility registry without revealing their real-world identity, secret credential, wallet address, or position in the allowlist. This repository represents our submission for **ZkPass Core** on the Midnight **"New Moon to Full" Level 3** hackathon track.
 
 ---
 
