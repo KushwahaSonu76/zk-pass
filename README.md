@@ -1,6 +1,6 @@
 # ZkPass Core 🛡️
 
-[![ZkPass Core CI](https://github.com/zkpass-core/zkpass-core/actions/workflows/ci.yml/badge.svg)](https://github.com/zkpass-core/zkpass-core/actions/workflows/ci.yml)
+[![ZkPass Core CI](https://github.com/KushwahaSonu76/ZkPass-Core/actions/workflows/ci.yml/badge.svg)](https://github.com/KushwahaSonu76/ZkPass-Core/actions/workflows/ci.yml)
 ![Midnight Compact](https://img.shields.io/badge/Midnight-Compact_v0.6-00F0FF?style=flat&logo=midnight)
 ![License](https://img.shields.io/badge/License-MIT-00FF9D?style=flat)
 ![Tests Passed](https://img.shields.io/badge/Tests-6%2F6_Passing-brightgreen?style=flat)
@@ -180,8 +180,8 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/zkpass-core/zkpass-core.git
-   cd zkpass-core
+   git clone https://github.com/KushwahaSonu76/ZkPass-Core.git
+   cd ZkPass-Core
    ```
 
 2. **Install all workspace dependencies**:
@@ -228,7 +228,7 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
 ## Project Structure
 
 ```text
-zkpass-core/
+ZkPass-Core/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # GitHub Actions CI/CD compile & test pipeline
