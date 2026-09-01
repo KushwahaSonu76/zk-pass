@@ -1,0 +1,31 @@
+{
+  "name": "zkpass-core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private Credential & Access Layer built on Midnight Blockchain using Compact zero-knowledge circuits.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "build:frontend": "npm run --prefix frontend build",
+    "dev:frontend": "npm run --prefix frontend dev",
+    "dev:indexer": "npm run --prefix indexer dev",
+    "build": "npm run build:frontend"
+  },
+  "workspaces": [
+    "contract",
+    "frontend",
+    "indexer"
+  ],
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^1.6.0",
+    "happy-dom": "^14.12.0"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "^0.6.0",
+    "@midnight-ntwrk/midnight-js-contracts": "^0.6.0",
+    "@midnight-ntwrk/midnight-js-types": "^0.6.0",
+    "@midnight-ntwrk/zswap": "^0.6.0"
+  }
+}
