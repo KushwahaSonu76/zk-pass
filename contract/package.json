@@ -5,9 +5,5 @@
   "main": "./index.ts",
   "scripts": {
     "build": "tsc"
-  },
-  "dependencies": {
-    "@midnight-ntwrk/compact-runtime": "^0.6.0",
-    "@midnight-ntwrk/midnight-js-contracts": "^0.6.0"
   }
 }
