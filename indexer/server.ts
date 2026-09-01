@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { MidnightEventWatcher } from './watcher';
 
@@ -9,7 +9,7 @@ export function createIndexerServer(watcher: MidnightEventWatcher) {
   app.use(express.json());
 
   // Health check endpoint
-  app.get('/api/health', (req, res) => {
+  app.get('/api/health', (req: Request, res: Response) => {
     res.json({
       status: 'UP',
       service: 'ZkPass Core Event Indexer',
@@ -19,7 +19,7 @@ export function createIndexerServer(watcher: MidnightEventWatcher) {
   });
 
   // Query live verifications API
-  app.get('/api/events', (req, res) => {
+  app.get('/api/events', (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 20;
     res.json({
       success: true,
@@ -29,15 +29,16 @@ export function createIndexerServer(watcher: MidnightEventWatcher) {
   });
 
   // Check specific proof hash status endpoint
-  app.get('/api/verification-status/:proofHash', (req, res) => {
+  app.get('/api/verification-status/:proofHash', (req: Request, res: Response) => {
     const { proofHash } = req.params;
     const record = watcher.getStatusByProofHash(proofHash);
 
     if (!record) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'Proof hash not found on Midnight ledger indexer',
       });
+      return;
     }
 
     res.json({
