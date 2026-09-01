@@ -1,0 +1,13 @@
+{
+  "name": "@zkpass/contract",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "^0.6.0",
+    "@midnight-ntwrk/midnight-js-contracts": "^0.6.0"
+  }
+}
