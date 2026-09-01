@@ -94,6 +94,70 @@ A formal specification of data visibility for observers inspecting the Midnight 
 
 ---
 
+## 📸 1. UI Showcase (Obsidian Tech Interface)
+
+Below are the dApp interface screenshots showcasing the Midnight Lace wallet connection, private witness circuit evaluation pipeline, admin issuer registry, and zero-identity verifier portal:
+
+### Prover Dashboard & ZK Proof Pipeline
+![ZkPass Core Prover Dashboard UI](./docs/screenshots/ui-prover-dashboard.png)
+*Figure 1.1: ZK Proof Generator with live 5-step Compact witness compilation pipeline, Lace wallet status, and reactive accessGranted verification badge.*
+
+### Issuer Registry (Admin Panel) & Privacy Audit
+![ZkPass Core Admin & Privacy Inspector UI](./docs/screenshots/ui-admin-privacy.png)
+*Figure 1.2: Issuer Registry panel for committing new credential roots into Midnight private state alongside the explicit Privacy Guarantee inspector.*
+
+---
+
+## 🧪 2. Test Execution & Output (6/6 Passing)
+
+Run the full automated Vitest test suite covering Compact circuit witness generation, smart contract state transitions, and identity privacy assertions:
+
+```bash
+npm test
+```
+
+### Terminal Test Output Screenshot
+![Vitest Unit Test Passing Output](./docs/screenshots/test-output.png)
+*Figure 2.1: Vitest output showing 3 test files and 6 unit tests passing cleanly with zero errors.*
+
+### Test Suite Coverage Breakdown
+
+- [`tests/zkpass_circuit.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/zkpass_circuit.test.ts): Verifies valid witness proof evaluation succeeds (`accessGranted = true`) and invalid/malformed witness proofs fail circuit constraints.
+- [`tests/zkpass_contract.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/zkpass_contract.test.ts): Verifies admin credential root registration, unauthorized signature rejection, and public event emission.
+- [`tests/privacy_leakage.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/privacy_leakage.test.ts): Explicitly asserts that user secret credentials, leaf indices, commitment hashes, and wallet addresses NEVER appear in public ledger state or emitted event JSON logs.
+
+```text
+ RUN  v1.6.1 C:/Users/hp/Desktop/Moon/Ritesh/ZkPass Core-level3
+
+ ✓ tests/zkpass_circuit.test.ts  (2 tests)
+ ✓ tests/zkpass_contract.test.ts  (3 tests)
+ ✓ tests/privacy_leakage.test.ts  (1 test)
+
+ Test Files  3 passed (3)
+      Tests  6 passed (6)
+   Duration  3.07s
+```
+
+---
+
+## 🚀 3. CI/CD Pipeline (GitHub Actions)
+
+Automated continuous integration is handled via GitHub Actions configured in [`.github/workflows/ci.yml`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/.github/workflows/ci.yml).
+
+### GitHub Actions Workflow Execution Screenshot
+![GitHub Actions CI Workflow Run](./docs/screenshots/ci-workflow-pass.png)
+*Figure 3.1: GitHub Actions CI workflow run passing all compilation, typechecking, test execution, and production build stages.*
+
+### CI/CD Workflow Stages
+On every `push` and `pull_request` to `main` or `master`, the workflow automatically:
+1. **Checkout & Environment Setup**: Sets up Node.js v20 with npm caching.
+2. **Dependency Installation**: Runs `npm install --legacy-peer-deps`.
+3. **TypeScript Typechecking**: Executes `npx tsc --noEmit` across all workspaces.
+4. **Vitest Execution**: Runs `npm test` verifying circuit, contract, and privacy tests.
+5. **Frontend Build**: Compiles Vite production bundle (`npm run build:frontend`).
+
+---
+
 ## Tech Stack
 
 - **Smart Contract Language**: Midnight Compact (`module ZkPassContract`)
@@ -146,49 +210,6 @@ A formal specification of data visibility for observers inspecting the Midnight 
    ```bash
    npm run --prefix contract build
    ```
-
----
-
-## Running Tests
-
-Run the full automated Vitest test suite covering Compact circuit witness generation, smart contract state transitions, and identity privacy assertions:
-
-```bash
-npm test
-```
-
-### Verified Test Suite Breakdown (6/6 Passing)
-
-- [`tests/zkpass_circuit.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/zkpass_circuit.test.ts): Verifies valid witness proof evaluation succeeds (`accessGranted = true`) and invalid/malformed witness proofs fail circuit constraints.
-- [`tests/zkpass_contract.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/zkpass_contract.test.ts): Verifies admin credential root registration, unauthorized signature rejection, and public event emission.
-- [`tests/privacy_leakage.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/privacy_leakage.test.ts): Explicitly asserts that user secret credentials, leaf indices, commitment hashes, and wallet addresses NEVER appear in public ledger state or emitted event JSON logs.
-
-```text
- RUN  v1.6.1 C:/Users/hp/Desktop/Moon/Ritesh/ZkPass Core-level3
-
- ✓ tests/zkpass_circuit.test.ts  (2 tests)
- ✓ tests/zkpass_contract.test.ts  (3 tests)
- ✓ tests/privacy_leakage.test.ts  (1 test)
-
- Test Files  3 passed (3)
-      Tests  6 passed (6)
-   Duration  3.07s
-```
-
----
-
-## CI/CD
-
-Automated continuous integration is handled via GitHub Actions configured in [`.github/workflows/ci.yml`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/.github/workflows/ci.yml). 
-
-On every `push` and `pull_request` to `main` or `master`, the workflow automatically:
-1. Checks out the codebase and sets up Node.js v20.
-2. Installs workspace dependencies (`npm install --legacy-peer-deps`).
-3. Performs strict TypeScript compilation check (`npx tsc --noEmit`).
-4. Executes the full 6-test Vitest suite (`npm test`).
-5. Builds the production frontend bundle (`npm run build:frontend`).
-
-The build status badge at the top of this README reflects live workflow run results.
 
 ---
 
