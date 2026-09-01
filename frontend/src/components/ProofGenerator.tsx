@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Lock, Cpu, CheckCircle, AlertTriangle, Sparkles, Loader2 } from 'lucide-react';
+import { Lock, Cpu, CheckCircle, AlertTriangle, Sparkles, Loader2, KeyRound, ShieldAlert } from 'lucide-react';
 import { AccessProofResult } from '../../../contract';
-import { ProofStepsTracker, ProofStep } from './ProofStepsTracker';
+import { PresetSelector, PRESETS, CredentialPreset } from './PresetSelector';
+import { TerminalSimulator } from './TerminalSimulator';
 
 interface ProofGeneratorProps {
   onGenerateProof: (secret: string, salt: string) => Promise<AccessProofResult>;
@@ -10,13 +11,12 @@ interface ProofGeneratorProps {
   isSubmitting: boolean;
 }
 
-const INITIAL_STEPS: ProofStep[] = [
-  { id: 1, label: 'Private Witness Import', description: 'Load user secret credential & salt in local memory', status: 'idle' },
-  { id: 2, label: 'Commitment Hash Computation', description: 'Evaluate sha256(secret || salt) commitment', status: 'idle' },
-  { id: 3, label: 'Merkle Membership Verification', description: 'Calculate 8-depth path against ledger root', status: 'idle' },
-  { id: 4, label: 'Midnight Compact Circuit ZKP', description: 'Generate zero-knowledge proof & verify constraints', status: 'idle' },
-  { id: 5, label: 'On-Chain Ledger State Transition', description: 'Emit public accessGranted=true event', status: 'idle' },
-];
+interface TerminalLog {
+  id: string;
+  timestamp: string;
+  type: 'info' | 'success' | 'warn' | 'zkp';
+  text: string;
+}
 
 export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
   onGenerateProof,
@@ -24,153 +24,175 @@ export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
   defaultSalt,
   isSubmitting,
 }) => {
-  const [secretInput, setSecretInput] = useState(defaultUserSecret);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>(PRESETS[0].id);
+  const [secretInput, setSecretInput] = useState(PRESETS[0].secret);
   const [saltInput, setSaltInput] = useState(defaultSalt);
   const [latestResult, setLatestResult] = useState<AccessProofResult | null>(null);
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [isPipelineRunning, setIsPipelineRunning] = useState(false);
+  const [logs, setLogs] = useState<TerminalLog[]>([]);
+  const [isExecuting, setIsExecuting] = useState(false);
+
+  const handleSelectPreset = (preset: CredentialPreset) => {
+    setSelectedPresetId(preset.id);
+    setSecretInput(preset.secret);
+  };
+
+  const getTime = () => new Date().toLocaleTimeString().split(' ')[0];
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsPipelineRunning(true);
-    setCurrentStepIndex(0);
+    setIsExecuting(true);
+    setLatestResult(null);
+    setLogs([]);
 
-    // Animate witness pipeline steps for interactive user experience
-    for (let i = 0; i < 4; i++) {
-      setCurrentStepIndex(i);
-      await new Promise((res) => setTimeout(res, 300));
-    }
+    const addLog = (type: 'info' | 'success' | 'warn' | 'zkp', text: string) => {
+      setLogs((prev) => [
+        ...prev,
+        { id: Math.random().toString(36).substring(2, 9), timestamp: getTime(), type, text },
+      ]);
+    };
+
+    // Live witness compilation simulation stream
+    addLog('info', 'Importing private witness credentials into browser local RAM context...');
+    await new Promise((res) => setTimeout(res, 250));
+
+    addLog('zkp', 'Evaluating Poseidon-sha256 commitment hash: sha256(secret || salt)...');
+    await new Promise((res) => setTimeout(res, 300));
+
+    addLog('zkp', 'Constructing 8-depth Merkle path witness against public ledger root...');
+    await new Promise((res) => setTimeout(res, 350));
+
+    addLog('zkp', 'Executing Midnight Compact circuit zero-knowledge constraint checks...');
+    await new Promise((res) => setTimeout(res, 350));
 
     const result = await onGenerateProof(secretInput, saltInput);
-    setCurrentStepIndex(4);
-    setLatestResult(result);
-    setIsPipelineRunning(false);
-  };
 
-  const loadPresetDemoSecret = () => {
-    setSecretInput(defaultUserSecret);
+    if (result.isValid) {
+      addLog('success', `Compact ZK Proof verified! Proof Hash: ${result.proofHash}`);
+      addLog('success', 'Public ledger state updated: accessGranted = TRUE (Identity Leakage: 0 bytes)');
+    } else {
+      addLog('warn', 'ZK Constraint Failure: Calculated Merkle root does not match ledger root!');
+    }
+
+    setLatestResult(result);
+    setIsExecuting(false);
   };
 
   return (
-    <div className="glass-card-glow p-6 rounded-2xl border border-neon-cyan/30 shadow-glow-cyan space-y-6">
+    <div className="cyber-card-emerald p-6 rounded-3xl space-y-6">
       
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-4">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan">
-            <Cpu className="w-5 h-5 animate-pulse" />
+          <div className="p-3 rounded-2xl bg-prism-emerald/10 border border-prism-emerald/40 text-prism-emerald shadow-prism-emerald">
+            <Cpu className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white font-mono flex items-center gap-2">
-              ZK Proof Generator <span className="text-xs text-neon-cyan font-normal font-sans">(Compact Witness)</span>
+            <h2 className="text-xl font-extrabold text-white font-mono flex items-center gap-2">
+              ZK Proof Generator <span className="text-xs text-prism-emerald font-normal font-sans">(Compact Engine)</span>
             </h2>
-            <p className="text-xs text-slate-400">Generate a zero-knowledge membership proof locally in your browser</p>
+            <p className="text-xs text-slate-400">Generate zero-knowledge membership proofs locally in your browser</p>
           </div>
         </div>
-        <button
-          onClick={loadPresetDemoSecret}
-          className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-obsidian-800 hover:bg-slate-800 border border-slate-700 text-neon-cyan transition-colors"
-        >
-          Load Demo Secret
-        </button>
       </div>
 
-      {/* Form Inputs */}
+      {/* Preset Selector */}
+      <PresetSelector selectedPresetId={selectedPresetId} onSelectPreset={handleSelectPreset} />
+
+      {/* Inputs Form */}
       <form onSubmit={handleGenerate} className="space-y-4">
         <div>
           <label className="block text-xs font-mono text-slate-300 mb-1.5 flex items-center justify-between">
-            <span className="flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-neon-cyan" /> Private Credential Secret
+            <span className="flex items-center gap-1.5 font-semibold text-white">
+              <Lock className="w-3.5 h-3.5 text-prism-emerald" /> Private Credential Secret
             </span>
-            <span className="text-neon-emerald text-[10px] font-semibold">Never leaves client</span>
+            <span className="text-prism-emerald text-[10px] font-semibold flex items-center gap-1">
+              <KeyRound className="w-3 h-3" /> Never Leaves Browser
+            </span>
           </label>
           <input
             type="password"
             value={secretInput}
             onChange={(e) => setSecretInput(e.target.value)}
-            placeholder="Enter your private credential secret..."
-            className="w-full px-4 py-2.5 rounded-xl bg-obsidian-950 border border-slate-700 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan font-mono text-sm text-slate-100 placeholder-slate-600 outline-none transition-all"
+            placeholder="Enter private credential secret..."
+            className="w-full px-4 py-3 rounded-2xl bg-cyber-950 border border-slate-700 focus:border-prism-emerald focus:ring-1 focus:ring-prism-emerald font-mono text-sm text-slate-100 placeholder-slate-600 outline-none transition-all"
           />
         </div>
 
         <div>
           <label className="block text-xs font-mono text-slate-300 mb-1.5">
-            Private Credential Salt (32-byte hex)
+            Private Salt (32-byte hex)
           </label>
           <input
             type="text"
             value={saltInput}
             onChange={(e) => setSaltInput(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-obsidian-950 border border-slate-700 focus:border-neon-cyan font-mono text-xs text-slate-400 outline-none"
+            className="w-full px-4 py-2.5 rounded-xl bg-cyber-950 border border-slate-800 text-slate-400 font-mono text-xs outline-none"
           />
         </div>
 
         <button
           type="submit"
-          disabled={!secretInput || isSubmitting || isPipelineRunning}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-neon-cyan via-teal-500 to-emerald-500 hover:opacity-95 disabled:opacity-50 text-obsidian-950 font-mono text-sm font-bold shadow-glow-cyan transition-all flex items-center justify-center space-x-2"
+          disabled={!secretInput || isSubmitting || isExecuting}
+          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-prism-emerald via-teal-400 to-emerald-500 hover:opacity-95 disabled:opacity-50 text-cyber-950 font-mono text-sm font-extrabold shadow-prism-emerald transition-all duration-300 flex items-center justify-center space-x-2"
         >
-          {isSubmitting || isPipelineRunning ? (
+          {isExecuting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-obsidian-950" />
-              <span>Evaluating Compact ZK Circuit Witnesses...</span>
+              <Loader2 className="w-4 h-4 animate-spin text-cyber-950" />
+              <span>Evaluating Compact Witnesses in Browser...</span>
             </>
           ) : (
             <>
               <Sparkles className="w-4 h-4" />
-              <span>Generate & Submit ZK Proof</span>
+              <span>Generate &amp; Submit ZK Proof</span>
             </>
           )}
         </button>
       </form>
 
-      {/* Live Pipeline Tracker */}
-      {(isPipelineRunning || latestResult) && (
-        <ProofStepsTracker steps={INITIAL_STEPS} currentStepIndex={currentStepIndex} />
-      )}
+      {/* Terminal Execution Log */}
+      <TerminalSimulator logs={logs} isRunning={isExecuting} />
 
-      {/* Proof Evaluation Result Banner */}
-      {latestResult && !isPipelineRunning && (
+      {/* Result Holographic Card */}
+      {latestResult && !isExecuting && (
         <div
-          className={`p-4 rounded-xl border font-mono text-xs space-y-2 transition-all ${
+          className={`p-4 rounded-2xl border font-mono text-xs space-y-3 transition-all ${
             latestResult.isValid
-              ? 'bg-emerald-950/40 border-neon-emerald/50 text-slate-200 shadow-glow-emerald'
-              : 'bg-rose-950/40 border-neon-rose/50 text-slate-200'
+              ? 'bg-emerald-950/40 border-prism-emerald/60 text-slate-100 shadow-prism-emerald'
+              : 'bg-rose-950/40 border-prism-crimson/60 text-slate-100'
           }`}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
             <div className="flex items-center space-x-2">
               {latestResult.isValid ? (
-                <CheckCircle className="w-5 h-5 text-neon-emerald" />
+                <CheckCircle className="w-5 h-5 text-prism-emerald" />
               ) : (
-                <AlertTriangle className="w-5 h-5 text-neon-rose" />
+                <AlertTriangle className="w-5 h-5 text-prism-crimson" />
               )}
               <span className="font-bold text-sm">
-                {latestResult.isValid ? 'ZK Proof Validated on Ledger' : 'ZK Proof Rejected (Root Mismatch)'}
+                {latestResult.isValid ? 'Proof Validated on Midnight Ledger' : 'Proof Rejected (Root Mismatch)'}
               </span>
             </div>
             <span
-              className={`px-2.5 py-1 rounded text-[10px] font-bold ${
-                latestResult.isValid ? 'bg-neon-emerald/20 text-neon-emerald' : 'bg-neon-rose/20 text-neon-rose'
+              className={`px-3 py-1 rounded-full text-[10px] font-extrabold ${
+                latestResult.isValid ? 'bg-prism-emerald/20 text-prism-emerald border border-prism-emerald/40' : 'bg-prism-crimson/20 text-prism-crimson'
               }`}
             >
-              {latestResult.isValid ? 'accessGranted: TRUE' : 'accessGranted: FALSE'}
+              {latestResult.isValid ? 'accessGranted = TRUE' : 'accessGranted = FALSE'}
             </span>
           </div>
 
-          <div className="text-[11px] text-slate-400 space-y-1 border-t border-slate-800/80 pt-2">
-            <div>
-              <span className="text-slate-500">Proof Hash: </span>
-              <span className="text-neon-cyan font-mono">{latestResult.proofHash}</span>
+          <div className="text-[11px] text-slate-300 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400">Public Proof Hash:</span>
+              <span className="text-prism-emerald font-bold">{latestResult.proofHash}</span>
             </div>
-            <div>
-              <span className="text-slate-500">Computed Merkle Root: </span>
-              <span className="text-slate-300 font-mono text-[10px] break-all">{latestResult.computedRoot}</span>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400">Merkle Root Verified:</span>
+              <span className="text-slate-300 text-[10px] truncate max-w-xs">{latestResult.computedRoot}</span>
             </div>
-            <div className="flex items-center gap-2 pt-1 text-neon-emerald text-[10px]">
-              <span>✓ Identity Disclosed: NONE</span>
-              <span>•</span>
-              <span>✓ Wallet Address Exposed: NONE</span>
+            <div className="flex items-center justify-between pt-1 border-t border-slate-900 text-prism-emerald font-semibold text-[10px]">
+              <span>✓ Prover Identity Exposed: 0 Bytes</span>
+              <span>✓ Wallet Address Exposed: 0 Bytes</span>
             </div>
           </div>
         </div>
