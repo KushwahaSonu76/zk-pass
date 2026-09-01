@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Cpu, CheckCircle, AlertTriangle, Sparkles, Loader2 } from 'lucide-react';
 import { AccessProofResult } from '../../../contract';
+import { ProofStepsTracker, ProofStep } from './ProofStepsTracker';
 
 interface ProofGeneratorProps {
   onGenerateProof: (secret: string, salt: string) => Promise<AccessProofResult>;
@@ -8,6 +9,14 @@ interface ProofGeneratorProps {
   defaultSalt: string;
   isSubmitting: boolean;
 }
+
+const INITIAL_STEPS: ProofStep[] = [
+  { id: 1, label: 'Private Witness Import', description: 'Load user secret credential & salt in local memory', status: 'idle' },
+  { id: 2, label: 'Commitment Hash Computation', description: 'Evaluate sha256(secret || salt) commitment', status: 'idle' },
+  { id: 3, label: 'Merkle Membership Verification', description: 'Calculate 8-depth path against ledger root', status: 'idle' },
+  { id: 4, label: 'Midnight Compact Circuit ZKP', description: 'Generate zero-knowledge proof & verify constraints', status: 'idle' },
+  { id: 5, label: 'On-Chain Ledger State Transition', description: 'Emit public accessGranted=true event', status: 'idle' },
+];
 
 export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
   onGenerateProof,
@@ -18,11 +27,24 @@ export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
   const [secretInput, setSecretInput] = useState(defaultUserSecret);
   const [saltInput, setSaltInput] = useState(defaultSalt);
   const [latestResult, setLatestResult] = useState<AccessProofResult | null>(null);
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [isPipelineRunning, setIsPipelineRunning] = useState(false);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsPipelineRunning(true);
+    setCurrentStepIndex(0);
+
+    // Animate witness pipeline steps for interactive user experience
+    for (let i = 0; i < 4; i++) {
+      setCurrentStepIndex(i);
+      await new Promise((res) => setTimeout(res, 300));
+    }
+
     const result = await onGenerateProof(secretInput, saltInput);
+    setCurrentStepIndex(4);
     setLatestResult(result);
+    setIsPipelineRunning(false);
   };
 
   const loadPresetDemoSecret = () => {
@@ -85,10 +107,10 @@ export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
 
         <button
           type="submit"
-          disabled={!secretInput || isSubmitting}
+          disabled={!secretInput || isSubmitting || isPipelineRunning}
           className="w-full py-3 rounded-xl bg-gradient-to-r from-neon-cyan via-teal-500 to-emerald-500 hover:opacity-95 disabled:opacity-50 text-obsidian-950 font-mono text-sm font-bold shadow-glow-cyan transition-all flex items-center justify-center space-x-2"
         >
-          {isSubmitting ? (
+          {isSubmitting || isPipelineRunning ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin text-obsidian-950" />
               <span>Evaluating Compact ZK Circuit Witnesses...</span>
@@ -102,12 +124,17 @@ export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
         </button>
       </form>
 
+      {/* Live Pipeline Tracker */}
+      {(isPipelineRunning || latestResult) && (
+        <ProofStepsTracker steps={INITIAL_STEPS} currentStepIndex={currentStepIndex} />
+      )}
+
       {/* Proof Evaluation Result Banner */}
-      {latestResult && (
+      {latestResult && !isPipelineRunning && (
         <div
           className={`p-4 rounded-xl border font-mono text-xs space-y-2 transition-all ${
             latestResult.isValid
-              ? 'bg-emerald-950/40 border-neon-emerald/50 text-slate-200'
+              ? 'bg-emerald-950/40 border-neon-emerald/50 text-slate-200 shadow-glow-emerald'
               : 'bg-rose-950/40 border-neon-rose/50 text-slate-200'
           }`}
         >
@@ -123,7 +150,7 @@ export const ProofGenerator: React.FC<ProofGeneratorProps> = ({
               </span>
             </div>
             <span
-              className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+              className={`px-2.5 py-1 rounded text-[10px] font-bold ${
                 latestResult.isValid ? 'bg-neon-emerald/20 text-neon-emerald' : 'bg-neon-rose/20 text-neon-rose'
               }`}
             >
