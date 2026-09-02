@@ -215,7 +215,7 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
 
 ## Live Demo
 
-🔗 Live demo: [ADD LINK AFTER DEPLOYMENT]
+🔗 Live demo: [https://zk-pass-core-frontend.vercel.app](https://zk-pass-core-frontend.vercel.app/)
 
 ---
 
