@@ -99,11 +99,11 @@ A formal specification of data visibility for observers inspecting the Midnight 
 Below are the dApp interface screenshots showcasing the Midnight Lace wallet connection, private witness circuit evaluation pipeline, admin issuer registry, and zero-identity verifier portal:
 
 ### Prover Dashboard & ZK Proof Pipeline
-![ZkPass Core Prover Dashboard UI](./docs/screenshots/ui-prover-dashboard.png)
+![ZkPass Core Prover Dashboard UI](./image-2.png)
 *Figure 1.1: ZK Proof Generator with live 5-step Compact witness compilation pipeline, Lace wallet status, and reactive accessGranted verification badge.*
 
 ### Issuer Registry (Admin Panel) & Privacy Audit
-![ZkPass Core Admin & Privacy Inspector UI](./docs/screenshots/ui-admin-privacy.png)
+![ZkPass Core Admin & Privacy Inspector UI](./image-3.png)
 *Figure 1.2: Issuer Registry panel for committing new credential roots into Midnight private state alongside the explicit Privacy Guarantee inspector.*
 
 ---
@@ -117,7 +117,7 @@ npm test
 ```
 
 ### Terminal Test Output Screenshot
-![Vitest Unit Test Passing Output](./docs/screenshots/test-output.png)
+![Vitest Unit Test Passing Output](./image-1.png)
 *Figure 2.1: Vitest output showing 3 test files and 6 unit tests passing cleanly with zero errors.*
 
 ### Test Suite Coverage Breakdown
@@ -145,7 +145,7 @@ npm test
 Automated continuous integration is handled via GitHub Actions configured in [`.github/workflows/ci.yml`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/.github/workflows/ci.yml).
 
 ### GitHub Actions Workflow Execution Screenshot
-![GitHub Actions CI Workflow Run](./docs/screenshots/ci-workflow-pass.png)
+![GitHub Actions CI Workflow Run](./image.png)
 *Figure 3.1: GitHub Actions CI workflow run passing all compilation, typechecking, test execution, and production build stages.*
 
 ### CI/CD Workflow Stages
