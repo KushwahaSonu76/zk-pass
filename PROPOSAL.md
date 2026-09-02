@@ -1,10 +1,16 @@
 # ZkPass Core: Product Proposal
 
-## Problem Statement
+## 1. What is the problem?
 In modern Web3 ecosystems, decentralized applications (dApps) frequently require users to verify eligibility, accredited investor status, KYC compliance, or exclusive membership tiers before granting access. However, traditional public blockchains force a catastrophic compromise: executing an access verification transaction publicly ties the user's real-world identity or wallet address to their sensitive credentials. Every access attempt creates an indelible, publicly searchable footprint on-chain, exposing users to targeted phishing, identity correlation attacks, and unauthorized financial profiling.
 
-## The Solution
+## 2. What is the solution?
 **ZkPass Core** solves this fundamental flaw by establishing a production-grade Zero-Knowledge Private Credential and Access Layer built natively on the Midnight blockchain. Authorized issuers register user credential commitments (Poseidon/SHA-256 digests) into a private Merkle root on the Midnight ledger. Users can then generate zero-knowledge membership proofs locally in their browser using Midnight's Compact circuits. Upon submission, the smart contract mathematically verifies that the user belongs to the valid credential registry set without ever revealing *who* the user is, *which* credential index is theirs, or *what* their wallet address is. The contract simply outputs a public boolean `accessGranted = true`, granting instant, unforgeable access with zero identity leakage.
 
-## Why Midnight's Privacy Model is Essential
+## 3. Why is Midnight's privacy model essential for this solution?
 Traditional public smart contract platforms (like Ethereum or Solana) store all contract variables and transaction call parameters transparently in public ledger state. Even when using off-chain ZK proofs on standard EVM chains, the Ethereum transaction sender address (`msg.sender`) is irrevocably exposed on every state transition, enabling bad actors to correlate user wallet addresses with access timing. Midnight's revolutionary dual-state model and Compact circuit engine separate private state and off-chain witnesses from public ledger state. On Midnight, the user's wallet address and credential secrets remain strictly confined to private witnesses, ensuring that an observer of the public ledger sees only valid mathematical proofs of compliance without any trace of user identity, wallet address, or activity linkability.
+
+## 4. How do you plan to use Midnight's features to solve the problem?
+We utilize Midnight's core capabilities in the following ways to enable ZkPass Core:
+- **Compact Zero-Knowledge Circuits:** We write our core verification logic in Compact, compiling it into an off-chain prover that runs locally in the user's browser. This allows users to generate zero-knowledge proofs of their allowlist membership without ever transmitting their sensitive credentials to the network.
+- **Private State Variables:** We store the Merkle root of the allowlist commitments in Midnight's private ledger state. This ensures that the global allowlist is not publicly exposed and cannot be reverse-engineered by malicious observers.
+- **Midnight Dual-State Architecture:** We bridge the private proof verification with a public state output (`accessGranted = true`). This dual-state approach allows third-party dApps to confidently read the public verification outcome while all identity and secret data remain perfectly shielded in the private state.

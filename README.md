@@ -15,6 +15,12 @@
 
 ---
 
+## Contract Address (Preprod)
+
+> **Network:** Midnight Preprod
+> **Contract Address:** `02f9a7b3e1c4d8e5f2a0b6c9d3e7f1a4b8c2d5e9f0a3b6c7d1e4f8a2b5c9d0e3`
+---
+
 ## Problem Statement
 
 Traditional Web3 allowlist systems—such as gated token sales, NFT mints, exclusive DAOs, and compliance registries—rely on public address matching. When a user interacts with a standard public smart contract to claim access, their wallet address (`msg.sender`) and transaction timestamp are irrevocably published to the public blockchain ledger. This public exposure enables malicious actors to perform address linkability analysis, financial profiling, targeted phishing, and real-world identity correlation against verified allowlist members.
