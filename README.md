@@ -70,9 +70,9 @@ ZkPass Core solves this privacy breakdown by combining Midnight's private state 
 ```
 
 ### Component Implementation Mapping
-- **Smart Contract & Circuit (`/contract`)**: Written in Midnight's Compact language ([contract/zkpass.compact](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/contract/zkpass.compact)) to enforce membership constraints over private witnesses. High-level client state management and cryptographic tree builders are implemented in [contract/circuit.ts](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/contract/circuit.ts) and [contract/index.ts](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/contract/index.ts).
-- **Frontend Application (`/frontend`)**: Built with React 18, TypeScript, Vite, and Tailwind CSS. Implements the Obsidian Tech glassmorphism UI ([frontend/src/App.tsx](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/frontend/src/App.tsx)), Midnight Lace wallet hook ([frontend/src/hooks/useMidnightWallet.ts](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/frontend/src/hooks/useMidnightWallet.ts)), and interactive witness compilation pipeline ([frontend/src/components/ProofGenerator.tsx](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/frontend/src/components/ProofGenerator.tsx)).
-- **Event Indexer (`/indexer`)**: Lightweight Node.js Express service ([indexer/server.ts](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/indexer/server.ts) and [indexer/watcher.ts](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/indexer/watcher.ts)) monitoring public ledger transitions for `accessGranted` events and serving verification REST APIs.
+- **Smart Contract & Circuit (`/contract`)**: Written in Midnight's Compact language ([contract/zkpass.compact](contract/zkpass.compact)) to enforce membership constraints over private witnesses. High-level client state management and cryptographic tree builders are implemented in [contract/circuit.ts](contract/circuit.ts) and [contract/index.ts](contract/index.ts).
+- **Frontend Application (`/frontend`)**: Built with React 18, TypeScript, Vite, and Tailwind CSS. Implements the Obsidian Tech glassmorphism UI ([frontend/src/App.tsx](frontend/src/App.tsx)), Midnight Lace wallet hook ([frontend/src/hooks/useMidnightWallet.ts](frontend/src/hooks/useMidnightWallet.ts)), and interactive witness compilation pipeline ([frontend/src/components/ProofGenerator.tsx](frontend/src/components/ProofGenerator.tsx)).
+- **Event Indexer (`/indexer`)**: Lightweight Node.js Express service ([indexer/server.ts](indexer/server.ts) and [indexer/watcher.ts](indexer/watcher.ts)) monitoring public ledger transitions for `accessGranted` events and serving verification REST APIs.
 - **Test Suite (`/tests`)**: Automated Vitest test suite executing circuit proof checks, contract state transitions, and privacy non-leakage assertions.
 - **CI/CD Pipeline (`/.github/workflows/ci.yml`)**: GitHub Actions workflow orchestrating compilation, typechecking, and automated test execution.
 
@@ -128,12 +128,12 @@ npm test
 
 ### Test Suite Coverage Breakdown
 
-- [`tests/zkpass_circuit.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/zkpass_circuit.test.ts): Verifies valid witness proof evaluation succeeds (`accessGranted = true`) and invalid/malformed witness proofs fail circuit constraints.
-- [`tests/zkpass_contract.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/zkpass_contract.test.ts): Verifies admin credential root registration, unauthorized signature rejection, and public event emission.
-- [`tests/privacy_leakage.test.ts`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/tests/privacy_leakage.test.ts): Explicitly asserts that user secret credentials, leaf indices, commitment hashes, and wallet addresses NEVER appear in public ledger state or emitted event JSON logs.
+- [`tests/zkpass_circuit.test.ts`](tests/zkpass_circuit.test.ts): Verifies valid witness proof evaluation succeeds (`accessGranted = true`) and invalid/malformed witness proofs fail circuit constraints.
+- [`tests/zkpass_contract.test.ts`](tests/zkpass_contract.test.ts): Verifies admin credential root registration, unauthorized signature rejection, and public event emission.
+- [`tests/privacy_leakage.test.ts`](tests/privacy_leakage.test.ts): Explicitly asserts that user secret credentials, leaf indices, commitment hashes, and wallet addresses NEVER appear in public ledger state or emitted event JSON logs.
 
 ```text
- RUN  v1.6.1 C:/Users/hp/Desktop/Moon/Ritesh/ZkPass Core-level3
+ RUN  v1.6.1 zk-pass
 
  ✓ tests/zkpass_circuit.test.ts  (2 tests)
  ✓ tests/zkpass_contract.test.ts  (3 tests)
@@ -151,7 +151,7 @@ npm test
 Automated continuous integration is handled via GitHub Actions configured in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ### GitHub Actions Workflow Execution Screenshot
-![CI/CD Workflow Passing Screenshot](image.png)
+![GitHub Actions CI Workflow](ci-workflow.png)
 *Figure 3.1: GitHub Actions CI workflow run passing all compilation, typechecking, test execution, and production build stages.*
 
 ### CI/CD Workflow Stages
