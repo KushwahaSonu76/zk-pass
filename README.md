@@ -148,10 +148,10 @@ npm test
 
 ## 🚀 3. CI/CD Pipeline (GitHub Actions)
 
-Automated continuous integration is handled via GitHub Actions configured in [`.github/workflows/ci.yml`](file:///c:/Users/hp/Desktop/Moon/Ritesh/ZkPass%20Core-level3/.github/workflows/ci.yml).
+Automated continuous integration is handled via GitHub Actions configured in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ### GitHub Actions Workflow Execution Screenshot
-![alt text](image.png)
+![CI/CD Workflow Passing Screenshot](image.png)
 *Figure 3.1: GitHub Actions CI workflow run passing all compilation, typechecking, test execution, and production build stages.*
 
 ### CI/CD Workflow Stages
