@@ -1,6 +1,6 @@
 # ZkPass Core 🛡️
 
-[![ZkPass Core CI](https://github.com/KushwahaSonu76/ZkPass-Core/actions/workflows/ci.yml/badge.svg)](https://github.com/KushwahaSonu76/ZkPass-Core/actions/workflows/ci.yml)
+[![ZkPass Core CI](https://github.com/KushwahaSonu76/zk-pass/actions/workflows/ci.yml/badge.svg)](https://github.com/KushwahaSonu76/zk-pass/actions/workflows/ci.yml)
 ![Midnight Compact](https://img.shields.io/badge/Midnight-Compact_v0.6-00F0FF?style=flat&logo=midnight)
 ![License](https://img.shields.io/badge/License-MIT-00FF9D?style=flat)
 ![Tests Passed](https://img.shields.io/badge/Tests-6%2F6_Passing-brightgreen?style=flat)
@@ -186,8 +186,8 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/KushwahaSonu76/ZkPass-Core.git
-   cd ZkPass-Core
+   git clone https://github.com/KushwahaSonu76/zk-pass.git
+   cd zk-pass
    ```
 
 2. **Install all workspace dependencies**:
@@ -289,6 +289,6 @@ This project is licensed under the **MIT License** - see the LICENSE file for de
 - **Developer**: KushwahaSonu76
 - **GitHub Profile**: [https://github.com/KushwahaSonu76](https://github.com/KushwahaSonu76)
 - **Email**: sonukushwaha821304@gmail.com
-- **Repository**: [https://github.com/KushwahaSonu76/ZkPass-Core](https://github.com/KushwahaSonu76/ZkPass-Core)
+- **Repository**: [https://github.com/KushwahaSonu76/zk-pass](https://github.com/KushwahaSonu76/zk-pass)
 - **Live Demo**: [https://zk-pass-core-frontend.vercel.app](https://zk-pass-core-frontend.vercel.app/)
 
