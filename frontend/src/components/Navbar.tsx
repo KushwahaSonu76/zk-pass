@@ -1,15 +1,16 @@
 import React from 'react';
-import { ShieldCheck, Cpu, Radio, Sparkles } from 'lucide-react';
+import { ShieldCheck, Cpu, Radio } from 'lucide-react';
 import { WalletConnect } from './WalletConnect';
 import { WalletState } from '../types';
+import { WalletType } from '../hooks/useMidnightWallet';
 
 interface NavbarProps {
   wallet: WalletState;
-  onConnect: () => void;
+  onConnectWalletType: (walletType: WalletType) => void;
   onDisconnect: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ wallet, onConnect, onDisconnect }) => {
+export const Navbar: React.FC<NavbarProps> = ({ wallet, onConnectWalletType, onDisconnect }) => {
   return (
     <header className="sticky top-0 z-50 cyber-card border-b border-prism-emerald/20 backdrop-blur-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -35,14 +36,18 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onConnect, onDisconnect 
           </div>
         </div>
 
-        {/* Network & Wallet Controls */}
+        {/* Network & Multi-Wallet Controls */}
         <div className="flex items-center space-x-4">
           <div className="hidden md:flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-cyber-900/90 border border-slate-800 text-xs font-mono">
             <Radio className="w-3.5 h-3.5 text-prism-emerald animate-pulse" />
             <span className="text-slate-300 font-semibold">Midnight Testnet</span>
           </div>
 
-          <WalletConnect wallet={wallet} onConnect={onConnect} onDisconnect={onDisconnect} />
+          <WalletConnect
+            wallet={wallet}
+            onConnectWalletType={onConnectWalletType}
+            onDisconnect={onDisconnect}
+          />
         </div>
 
       </div>

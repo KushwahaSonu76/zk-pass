@@ -7,10 +7,10 @@ import { LedgerActivity } from './components/LedgerActivity';
 import { PrivacyModelCard } from './components/PrivacyModelCard';
 import { useMidnightWallet } from './hooks/useMidnightWallet';
 import { useZkPassContract } from './hooks/useZkPassContract';
-import { Shield, Lock, Eye, Sparkles, Terminal, FileCode, CheckCircle, Cpu, Radio } from 'lucide-react';
+import { Shield, Sparkles } from 'lucide-react';
 
 export function App() {
-  const { wallet, connectWallet, disconnectWallet } = useMidnightWallet();
+  const { wallet, connectWalletType, disconnectWallet } = useMidnightWallet();
   const {
     ledgerState,
     registeredCommitments,
@@ -28,7 +28,7 @@ export function App() {
     <div className="min-h-screen bg-cyber-950 text-slate-100 flex flex-col selection:bg-prism-emerald/20 selection:text-prism-emerald">
       
       {/* Sticky Header */}
-      <Navbar wallet={wallet} onConnect={connectWallet} onDisconnect={disconnectWallet} />
+      <Navbar wallet={wallet} onConnectWalletType={connectWalletType} onDisconnect={disconnectWallet} />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -158,7 +158,7 @@ export function App() {
           <div className="flex items-center space-x-4 text-slate-400">
             <span>Compact ZK Smart Contracts</span>
             <span>•</span>
-            <span>Lace Wallet Bridge</span>
+            <span>Multi-Wallet Bridge (Freighter, Lace, MetaMask)</span>
           </div>
         </div>
       </footer>
