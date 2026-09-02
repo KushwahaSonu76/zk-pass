@@ -275,3 +275,14 @@ This project was submitted and approved under the **"Private Allowlist Access"**
 ## License
 
 This project is licensed under the **MIT License** - see the LICENSE file for details.
+
+---
+
+## 👤 Author & Developer Details
+
+- **Developer**: KushwahaSonu76
+- **GitHub Profile**: [https://github.com/KushwahaSonu76](https://github.com/KushwahaSonu76)
+- **Email**: sonukushwaha821304@gmail.com
+- **Repository**: [https://github.com/KushwahaSonu76/ZkPass-Core](https://github.com/KushwahaSonu76/ZkPass-Core)
+- **Live Demo**: [https://zk-pass-core-frontend.vercel.app](https://zk-pass-core-frontend.vercel.app/)
+
