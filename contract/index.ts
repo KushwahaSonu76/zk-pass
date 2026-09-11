@@ -7,8 +7,16 @@ import {
 } from './circuit';
 
 // Export compiled Midnight Compact contract artifacts and types from managed directory
-export * from './src/managed/zkpass/index';
-export { Contract as CompactContract } from './src/managed/zkpass/contract/index';
+export {
+  Contract as CompactContract,
+  initialLedgerState,
+  ledger,
+  contract as compactContractInstance,
+} from './src/managed/zkpass/contract/index';
+export type { Ledger as CompactLedger } from './src/managed/zkpass/contract/index';
+export type { Witnesses as CompactWitnesses } from './src/managed/zkpass/witnesses/index';
+export { pureCircuits as compactPureCircuits } from './src/managed/zkpass/circuits/index';
+export type { PureCircuits as CompactPureCircuits, ImpureCircuits as CompactImpureCircuits } from './src/managed/zkpass/circuits/index';
 
 export interface LedgerState {
   credentialRoot: string;

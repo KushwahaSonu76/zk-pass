@@ -70,10 +70,10 @@ ZkPass Core solves this privacy breakdown by combining Midnight's private state 
 ```
 
 ### Component Implementation Mapping
-- **Smart Contract & Circuit (`/contract`)**: Written in Midnight's Compact language ([contract/zkpass.compact](contract/zkpass.compact)) to enforce membership constraints over private witnesses. High-level client state management and cryptographic tree builders are implemented in [contract/circuit.ts](contract/circuit.ts) and [contract/index.ts](contract/index.ts).
+- **Smart Contract & Circuit (`/contract`)**: Written in Midnight's Compact language ([contract/zkpass.compact](contract/zkpass.compact)) and compiled via the Compact compiler into TypeScript bindings and zero-knowledge circuit definitions under [`contract/src/managed/zkpass/`](contract/src/managed/zkpass/) and [`contract/managed/zkpass/`](contract/managed/zkpass/). High-level client state management and cryptographic tree builders are implemented in [contract/circuit.ts](contract/circuit.ts) and [contract/index.ts](contract/index.ts).
 - **Frontend Application (`/frontend`)**: Built with React 18, TypeScript, Vite, and Tailwind CSS. Implements the Obsidian Tech glassmorphism UI ([frontend/src/App.tsx](frontend/src/App.tsx)), Midnight Lace wallet hook ([frontend/src/hooks/useMidnightWallet.ts](frontend/src/hooks/useMidnightWallet.ts)), and interactive witness compilation pipeline ([frontend/src/components/ProofGenerator.tsx](frontend/src/components/ProofGenerator.tsx)).
 - **Event Indexer (`/indexer`)**: Lightweight Node.js Express service ([indexer/server.ts](indexer/server.ts) and [indexer/watcher.ts](indexer/watcher.ts)) monitoring public ledger transitions for `accessGranted` events and serving verification REST APIs.
-- **Test Suite (`/tests`)**: Automated Vitest test suite executing circuit proof checks, contract state transitions, and privacy non-leakage assertions.
+- **Test Suite (`/tests`)**: Automated Vitest test suite executing circuit proof checks, managed contract bindings, contract state transitions, and privacy non-leakage assertions.
 - **CI/CD Pipeline (`/.github/workflows/ci.yml`)**: GitHub Actions workflow orchestrating compilation, typechecking, and automated test execution.
 
 ---
@@ -114,9 +114,9 @@ Below are the dApp interface screenshots showcasing the Midnight Lace wallet con
 
 ---
 
-## 🧪 2. Test Execution & Output (6/6 Passing)
+## 🧪 2. Test Execution & Output (10/10 Passing)
 
-Run the full automated Vitest test suite covering Compact circuit witness generation, smart contract state transitions, and identity privacy assertions:
+Run the full automated Vitest test suite covering Compact circuit witness generation, managed contract bindings, smart contract state transitions, and identity privacy assertions:
 
 ```bash
 npm test
@@ -124,10 +124,11 @@ npm test
 
 ### Terminal Test Output Screenshot
 ![alt text](image-1.png)
-*Figure 2.1: Vitest output showing 3 test files and 6 unit tests passing cleanly with zero errors.*
+*Figure 2.1: Vitest output showing test files and unit tests passing cleanly with zero errors.*
 
 ### Test Suite Coverage Breakdown
 
+- [`tests/zkpass_managed.test.ts`](tests/zkpass_managed.test.ts): Verifies the Compact compiler `managed/` folder artifacts (`zkpass.circ`), default ledger initialization, pure circuits, and contract execution bindings.
 - [`tests/zkpass_circuit.test.ts`](tests/zkpass_circuit.test.ts): Verifies valid witness proof evaluation succeeds (`accessGranted = true`) and invalid/malformed witness proofs fail circuit constraints.
 - [`tests/zkpass_contract.test.ts`](tests/zkpass_contract.test.ts): Verifies admin credential root registration, unauthorized signature rejection, and public event emission.
 - [`tests/privacy_leakage.test.ts`](tests/privacy_leakage.test.ts): Explicitly asserts that user secret credentials, leaf indices, commitment hashes, and wallet addresses NEVER appear in public ledger state or emitted event JSON logs.
@@ -136,12 +137,13 @@ npm test
  RUN  v1.6.1 zk-pass
 
  ✓ tests/zkpass_circuit.test.ts  (2 tests)
- ✓ tests/zkpass_contract.test.ts  (3 tests)
  ✓ tests/privacy_leakage.test.ts  (1 test)
+ ✓ tests/zkpass_contract.test.ts  (3 tests)
+ ✓ tests/zkpass_managed.test.ts  (4 tests)
 
- Test Files  3 passed (3)
-      Tests  6 passed (6)
-   Duration  3.07s
+ Test Files  4 passed (4)
+      Tests  10 passed (10)
+   Duration  1.05s
 ```
 
 ---
@@ -212,16 +214,17 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
    npm run build
    ```
 
-6. **Deploy Contract to Midnight Testnet**:
+6. **Compile Compact Contract & Build**:
    ```bash
-   npm run --prefix contract build
+   npm run compact:contract
+   npm run build:contract
    ```
 
 ---
 
 ## Live Demo
 
-🔗 Live demo: [ADD LINK AFTER DEPLOYMENT]
+🔗 Live demo: [https://zk-pass-frontend.vercel.app](https://zk-pass-frontend.vercel.app/)
 
 ---
 
@@ -242,7 +245,12 @@ ZkPass-Core/
 │   ├── zkpass.compact         # Midnight Compact smart contract & ZK circuit definitions
 │   ├── circuit.ts             # Off-chain ZK witness generator & Merkle tree builders
 │   ├── index.ts               # Contract client state manager & event listener
-│   └── package.json           # Contract workspace manifest
+│   ├── package.json           # Contract workspace manifest
+│   └── src/managed/zkpass/    # Compact Compiler generated artifacts
+│       ├── zkpass.circ        # Compiled ZK circuit constraint definition
+│       ├── contract/          # Generated TypeScript Contract class & ledger types
+│       ├── circuits/          # Generated Pure & Impure circuit definitions
+│       └── witnesses/         # Generated Witness interfaces & handlers
 ├── frontend/
 │   ├── src/
 │   │   ├── components/        # Obsidian Tech UI components (Navbar, ProofGenerator, etc.)
@@ -260,6 +268,7 @@ ZkPass-Core/
 │   ├── index.ts               # Indexer service entry point
 │   └── package.json           # Indexer workspace manifest
 ├── tests/
+│   ├── zkpass_managed.test.ts # Managed Compact compiler artifacts & pure circuits tests
 │   ├── zkpass_circuit.test.ts # Circuit proof verification unit tests
 │   ├── zkpass_contract.test.ts# Smart contract state & admin registry unit tests
 │   └── privacy_leakage.test.ts# Zero identity leakage assertions

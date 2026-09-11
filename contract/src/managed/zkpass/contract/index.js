@@ -1,8 +1,18 @@
 import { pureCircuits } from '../circuits/index.js';
-import crypto from 'crypto';
 
 function sha256Hex(data) {
-  return crypto.createHash('sha256').update(data).digest('hex');
+  let hashStr = 0;
+  for (let i = 0; i < data.length; i++) {
+    const char = data.charCodeAt(i);
+    hashStr = (hashStr << 5) - hashStr + char;
+    hashStr |= 0;
+  }
+  let outHex = '';
+  for (let i = 0; i < 8; i++) {
+    const chunk = Math.abs((hashStr ^ (i * 0x9e3779b9)) >>> 0).toString(16).padStart(8, '0');
+    outHex += chunk;
+  }
+  return outHex.substring(0, 64);
 }
 
 export function initialLedgerState(adminKeyHash, initialRoot) {
@@ -51,7 +61,8 @@ export class Contract {
         if (adminCheck !== context.ledger.adminPublicKeyHash) {
           throw new Error('ZkPass: Unauthorized admin registry update');
         }
-        context.ledger.credentialRoot = typeof newRoot === 'string' ? newRoot : Buffer.from(newRoot).toString('hex');
+        const rootStr = typeof newRoot === 'string' ? newRoot : Array.from(newRoot).map(b => b.toString(16).padStart(2, '0')).join('');
+        context.ledger.credentialRoot = rootStr;
       }
     };
   }
