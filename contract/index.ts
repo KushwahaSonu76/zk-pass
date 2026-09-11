@@ -6,6 +6,10 @@ import {
   sha256Hex
 } from './circuit';
 
+// Export compiled Midnight Compact contract artifacts and types from managed directory
+export * from './src/managed/zkpass/index';
+export { Contract as CompactContract } from './src/managed/zkpass/contract/index';
+
 export interface LedgerState {
   credentialRoot: string;
   accessGrantedCount: number;

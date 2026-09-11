@@ -7,10 +7,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "build:contract": "npm run --prefix contract build",
+    "compact:contract": "npm run --prefix contract compact",
     "build:frontend": "npm run --prefix frontend build",
     "dev:frontend": "npm run --prefix frontend dev",
     "dev:indexer": "npm run --prefix indexer dev",
-    "build": "npm run build:frontend"
+    "build": "npm run build:contract && npm run build:frontend"
   },
   "workspaces": [
     "contract",

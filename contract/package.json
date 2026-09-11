@@ -3,7 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./managed": "./src/managed/zkpass/index.js",
+    "./managed/*": "./src/managed/*"
+  },
   "scripts": {
+    "compact": "compact compile zkpass.compact -o ./src/managed/zkpass",
     "build": "tsc"
-  }
+  },
+  "files": [
+    "zkpass.compact",
+    "index.ts",
+    "circuit.ts",
+    "src/managed",
+    "managed"
+  ]
 }
