@@ -1,0 +1,26 @@
+{
+  "compiler": "compactc-v0.6.0",
+  "contract": "ZkPassContract",
+  "source": "zkpass.compact",
+  "ledger": {
+    "credentialRoot": "Bytes<32>",
+    "accessGrantedCount": "Uint<64>",
+    "adminPublicKeyHash": "Bytes<32>",
+    "revocationRoot": "Bytes<32>"
+  },
+  "witnesses": [
+    "secretCredential",
+    "credentialSalt",
+    "merklePath",
+    "leafIndex"
+  ],
+  "circuits": [
+    "computeCommitment",
+    "calculateMerkleRoot",
+    "verifyCredentialProof",
+    "registerCredentialRoot"
+  ],
+  "constraints": 1284,
+  "publicInputs": 2,
+  "privateInputs": 4
+}
