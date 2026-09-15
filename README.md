@@ -18,7 +18,8 @@
 ## Contract Address (Preprod)
 
 > **Network:** Midnight Preprod
-> **Contract Address:** `02f9a7b3e1c4d8e5f2a0b6c9d3e7f1a4b8c2d5e9f0a3b6c7d1e4f8a2b5c9d0e3`
+> **Contract Address:** `45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011`
+> **Explorer URL:** [https://preprod.midnight.network/contract/45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011](https://preprod.midnight.network/contract/45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011)
 ---
 
 ## Problem Statement
