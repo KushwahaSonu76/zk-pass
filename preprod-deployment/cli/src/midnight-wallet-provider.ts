@@ -38,6 +38,22 @@ import {
   createKeystore,
   NoOpTransactionHistoryStorage,
 } from '@midnight-ntwrk/wallet-sdk';
+import { mnemonicToEntropy } from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english.js';
+
+function toHexSeed(seed?: string): string | undefined {
+  if (!seed) return undefined;
+  const trimmed = seed.trim();
+  if (trimmed.includes(' ')) {
+    try {
+      const entropy = mnemonicToEntropy(trimmed, wordlist);
+      return Buffer.from(entropy).toString('hex');
+    } catch {
+      return trimmed;
+    }
+  }
+  return trimmed;
+}
 
 type UnshieldedKeystore = {
   getPublicKey(): unknown;
@@ -138,7 +154,8 @@ export class MidnightWalletProvider implements MidnightProvider, WalletProvider 
       },
     };
 
-    const seeds = seed ? WalletSeeds.fromMasterSeed(seed) : WalletSeeds.generateRandom();
+    const normalizedSeed = toHexSeed(seed);
+    const seeds = normalizedSeed ? WalletSeeds.fromMasterSeed(normalizedSeed) : WalletSeeds.generateRandom();
     const keystore = createKeystore(seeds.unshielded, env.walletNetworkId as any);
 
     const unshieldedWallet = WalletFactory.createUnshieldedWallet(walletConfig as any, keystore);

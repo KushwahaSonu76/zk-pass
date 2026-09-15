@@ -17,11 +17,27 @@ import { generateDust } from '../generate-dust.js';
 import { unshieldedToken } from '@midnight-ntwrk/midnight-js-protocol/ledger';
 import { FaucetClient } from '@midnight-ntwrk/testkit-js';
 import * as Rx from 'rxjs';
+import { mnemonicToEntropy } from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english.js';
+
+function resolveMasterSeed(input: string): string {
+  const trimmed = input.trim();
+  if (trimmed.includes(' ')) {
+    try {
+      const entropy = mnemonicToEntropy(trimmed, wordlist);
+      return Buffer.from(entropy).toString('hex');
+    } catch {
+      return trimmed;
+    }
+  }
+  return trimmed;
+}
 
 async function main() {
   console.log("Starting deployment to Preprod...");
-  const seed = process.env.WALLET_SEED || "please enjoy bread milk lady devote female ancient hollow split quit east rich cable job grass bounce enter rule tip grocery pear visa chimney";
-  if (!seed) throw new Error("WALLET_SEED environment variable is required");
+  const rawSeed = process.env.WALLET_SEED || "please enjoy bread milk lady devote female ancient hollow split quit east rich cable job grass bounce enter rule tip grocery pear visa chimney";
+  if (!rawSeed) throw new Error("WALLET_SEED environment variable is required");
+  const seed = resolveMasterSeed(rawSeed);
   
   const config = new PreprodRemoteConfig();
   const logger = await createLogger(config.logDir, false);
