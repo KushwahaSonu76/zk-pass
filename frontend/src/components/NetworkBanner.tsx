@@ -13,7 +13,7 @@ export const NetworkBanner: React.FC<NetworkBannerProps> = ({
   const [copied, setCopied] = useState(false);
   const [selectedNetwork, setSelectedNetwork] = useState(network);
 
-  const explorerUrl = `https://preprod.midnight.network/contract/${contractAddress}`;
+  const explorerUrl = `https://preprod.midnightexplorer.com/contracts/0x${contractAddress}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(contractAddress);

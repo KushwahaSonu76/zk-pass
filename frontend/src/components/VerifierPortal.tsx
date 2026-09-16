@@ -221,7 +221,7 @@ export const VerifierPortal: React.FC<VerifierPortalProps> = ({ ledgerState }) =
               </button>
 
               <a
-                href={`https://preprod.midnight.network/contract/45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011`}
+                href={`https://preprod.midnightexplorer.com/contracts/0x45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 py-2 rounded-xl bg-cyber-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white transition-all flex items-center gap-1.5 text-xs"
