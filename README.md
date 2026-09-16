@@ -298,7 +298,7 @@ This project is licensed under the **MIT License** - see the LICENSE file for de
 
 - **Developer**: KushwahaSonu76
 - **GitHub Profile**: [https://github.com/KushwahaSonu76](https://github.com/KushwahaSonu76)
-- **X (Twitter)**: [https://x.com/Riteshk86495001](https://x.com/Riteshk86495001)
+- **X (Twitter)**: [https://x.com/Zk_Pass_core](https://x.com/Zk_Pass_core)
 - **Email**: sonukushwaha821304@gmail.com
 - **Repository**: [https://github.com/KushwahaSonu76/zk-pass](https://github.com/KushwahaSonu76/zk-pass)
 - **Live Demo**: [https://zk-pass-frontend.vercel.app](https://zk-pass-frontend.vercel.app/)
