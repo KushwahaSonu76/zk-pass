@@ -584,7 +584,7 @@ export function App() {
               Midnight Preprod Explorer
             </a>
             <span>•</span>
-            <span>Multi-Wallet Bridge (Lace, Freighter, MetaMask)</span>
+            <span>Midnight Native Wallets (Lace &amp; 1 AM Wallet)</span>
           </div>
         </div>
       </footer>
