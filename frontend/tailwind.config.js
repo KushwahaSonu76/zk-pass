@@ -26,7 +26,8 @@ export default {
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
+        space: ['Space Grotesk', 'sans-serif'],
       },
       boxShadow: {
         'prism-emerald': '0 0 35px -5px rgba(0, 255, 179, 0.35)',
