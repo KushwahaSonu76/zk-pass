@@ -38,9 +38,9 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onConnectWalletType, onD
 
         {/* Network Status & Multi-Wallet Trigger */}
         <div className="flex items-center space-x-3.5">
-          <div className="hidden md:flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-cyber-950 border border-slate-800 text-xs font-mono">
+          <div className="hidden md:flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-cyber-950 border border-prism-emerald/30 text-xs font-mono">
             <Radio className="w-3.5 h-3.5 text-prism-emerald animate-pulse" />
-            <span className="text-slate-300 font-semibold">Midnight Testnet</span>
+            <span className="text-prism-emerald font-bold">Midnight Preprod</span>
           </div>
 
           <WalletConnect

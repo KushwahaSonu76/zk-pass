@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
+import { NetworkBanner } from './components/NetworkBanner';
 import { AdminPanel } from './components/AdminPanel';
 import { ProofGenerator } from './components/ProofGenerator';
+import { VisualMerkleTree } from './components/VisualMerkleTree';
 import { VerificationBadge } from './components/VerificationBadge';
+import { VerifierPortal } from './components/VerifierPortal';
 import { LedgerActivity } from './components/LedgerActivity';
 import { PrivacyModelCard } from './components/PrivacyModelCard';
 import { useMidnightWallet } from './hooks/useMidnightWallet';
 import { useZkPassContract } from './hooks/useZkPassContract';
-import { Shield, Sparkles } from 'lucide-react';
+import { Shield, Sparkles, GitBranch, Cpu, Lock, CheckCircle2 } from 'lucide-react';
+import { AccessProofResult, computeCommitment } from '../../contract';
 
 export function App() {
   const { wallet, connectWalletType, disconnectWallet } = useMidnightWallet();
@@ -22,7 +26,25 @@ export function App() {
     defaultSalt,
   } = useZkPassContract();
 
-  const [activeTab, setActiveTab] = useState<'prover' | 'admin' | 'privacy'>('prover');
+  const [activeTab, setActiveTab] = useState<'prover' | 'verifier' | 'tree' | 'admin' | 'privacy'>('prover');
+  const [activeProofData, setActiveProofData] = useState<{
+    result: AccessProofResult;
+    commitment: string;
+    secret: string;
+    salt: string;
+  } | null>(null);
+
+  const handleProofGenerated = (result: AccessProofResult, secret: string, salt: string) => {
+    try {
+      const commitment = computeCommitment(secret, salt);
+      setActiveProofData({
+        result,
+        commitment,
+        secret,
+        salt,
+      });
+    } catch {}
+  };
 
   return (
     <div className="min-h-screen bg-cyber-950 text-slate-100 flex flex-col selection:bg-prism-emerald/20 selection:text-prism-emerald">
@@ -31,8 +53,11 @@ export function App() {
       <Navbar wallet={wallet} onConnectWalletType={connectWalletType} onDisconnect={disconnectWallet} />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         
+        {/* Midnight Preprod Live Deployment Banner */}
+        <NetworkBanner contractAddress="45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011" network="Midnight Preprod" />
+
         {/* Cyber-Vault Hero Banner */}
         <section className="relative overflow-hidden cyber-card p-8 sm:p-10 rounded-3xl border border-prism-emerald/25 text-center space-y-5">
           <div className="absolute -top-32 -left-32 w-80 h-80 bg-prism-purple/20 rounded-full blur-3xl pointer-events-none" />
@@ -40,7 +65,7 @@ export function App() {
 
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-cyber-900 border border-prism-emerald/40 text-prism-emerald text-xs font-mono font-bold shadow-prism-emerald">
             <Sparkles className="w-4 h-4 text-prism-emerald" />
-            <span>Midnight Blockchain ZK Private Access Protocol</span>
+            <span>Midnight Blockchain ZK Private Allowlist Protocol</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-black font-mono tracking-tight text-white max-w-4xl mx-auto leading-tight">
@@ -48,13 +73,13 @@ export function App() {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-sans leading-relaxed">
-            Prove valid KYC compliance, accredited investor status, or exclusive membership tier **without revealing your identity, wallet address, or underlying credential position**.
+            Prove valid KYC compliance, accredited investor status, or exclusive membership tier <strong>without revealing your identity, wallet address, or underlying credential position</strong>.
           </p>
 
           {/* Quick Metrics Bar */}
           <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-4xl mx-auto font-mono text-xs">
             <div className="p-3.5 rounded-2xl bg-cyber-900/90 border border-slate-800 text-left">
-              <span className="text-slate-500 block font-semibold text-[10px]">Ledger State</span>
+              <span className="text-slate-500 block font-semibold text-[10px]">Preprod State</span>
               <span className="text-prism-emerald font-extrabold text-sm flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-prism-emerald animate-pulse" /> Active Root
               </span>
@@ -69,27 +94,47 @@ export function App() {
             </div>
             <div className="p-3.5 rounded-2xl bg-cyber-900/90 border border-slate-800 text-left">
               <span className="text-slate-500 block font-semibold text-[10px]">Proof Engine</span>
-              <span className="text-prism-purple font-extrabold text-sm">Compact ZK</span>
+              <span className="text-prism-purple font-extrabold text-sm">Compact ZK v0.31</span>
             </div>
           </div>
         </section>
 
         {/* Tab Navigation */}
-        <div className="flex justify-center">
+        <div className="flex justify-center overflow-x-auto pb-2">
           <div className="inline-flex p-1.5 rounded-2xl bg-cyber-900 border border-slate-800 font-mono text-xs space-x-2">
             <button
               onClick={() => setActiveTab('prover')}
-              className={`px-5 py-3 rounded-xl font-bold transition-all ${
+              className={`px-4 sm:px-5 py-2.5 rounded-xl font-bold transition-all ${
                 activeTab === 'prover'
                   ? 'bg-prism-emerald/20 border border-prism-emerald/50 text-prism-emerald shadow-prism-emerald'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Prover &amp; Verification Portal
+              Prover &amp; Generator
+            </button>
+            <button
+              onClick={() => setActiveTab('tree')}
+              className={`px-4 sm:px-5 py-2.5 rounded-xl font-bold transition-all ${
+                activeTab === 'tree'
+                  ? 'bg-prism-teal/20 border border-prism-teal/50 text-prism-teal shadow-prism-teal'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Visual Merkle Tree
+            </button>
+            <button
+              onClick={() => setActiveTab('verifier')}
+              className={`px-4 sm:px-5 py-2.5 rounded-xl font-bold transition-all ${
+                activeTab === 'verifier'
+                  ? 'bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Verifier Portal &amp; Certificate
             </button>
             <button
               onClick={() => setActiveTab('admin')}
-              className={`px-5 py-3 rounded-xl font-bold transition-all ${
+              className={`px-4 sm:px-5 py-2.5 rounded-xl font-bold transition-all ${
                 activeTab === 'admin'
                   ? 'bg-prism-purple/20 border border-prism-purple/50 text-prism-purple shadow-prism-purple'
                   : 'text-slate-400 hover:text-slate-200'
@@ -99,13 +144,13 @@ export function App() {
             </button>
             <button
               onClick={() => setActiveTab('privacy')}
-              className={`px-5 py-3 rounded-xl font-bold transition-all ${
+              className={`px-4 sm:px-5 py-2.5 rounded-xl font-bold transition-all ${
                 activeTab === 'privacy'
-                  ? 'bg-prism-teal/20 border border-prism-teal/50 text-prism-teal shadow-prism-teal'
+                  ? 'bg-prism-amber/20 border border-prism-amber/50 text-amber-300 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Privacy Guarantee Audit
+              Privacy Audit Inspector
             </button>
           </div>
         </div>
@@ -119,13 +164,34 @@ export function App() {
                 defaultUserSecret={defaultUserSecret}
                 defaultSalt={defaultSalt}
                 isSubmitting={isSubmitting}
+                onProofGenerated={handleProofGenerated}
               />
               <VerificationBadge ledgerState={ledgerState} />
             </div>
             <div className="space-y-6">
+              <VisualMerkleTree
+                currentRoot={ledgerState.credentialRoot}
+                commitments={registeredCommitments}
+                activeCommitment={activeProofData?.commitment}
+              />
               <LedgerActivity history={history} />
-              <PrivacyModelCard />
             </div>
+          </div>
+        )}
+
+        {activeTab === 'tree' && (
+          <div className="max-w-4xl mx-auto space-y-6">
+            <VisualMerkleTree
+              currentRoot={ledgerState.credentialRoot}
+              commitments={registeredCommitments}
+              activeCommitment={activeProofData?.commitment}
+            />
+          </div>
+        )}
+
+        {activeTab === 'verifier' && (
+          <div className="max-w-4xl mx-auto space-y-6">
+            <VerifierPortal ledgerState={ledgerState} />
           </div>
         )}
 
@@ -158,7 +224,9 @@ export function App() {
           <div className="flex items-center space-x-4 text-slate-400">
             <span>Compact ZK Smart Contracts</span>
             <span>•</span>
-            <span>Multi-Wallet Bridge (Freighter, Lace, MetaMask)</span>
+            <span>Midnight Preprod Verified Contract</span>
+            <span>•</span>
+            <span>Multi-Wallet Bridge (Lace, Freighter, MetaMask)</span>
           </div>
         </div>
       </footer>

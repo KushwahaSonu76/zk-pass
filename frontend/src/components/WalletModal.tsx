@@ -143,7 +143,7 @@ export const WalletModal: React.FC<WalletModalProps> = ({
             <Cpu className="w-3.5 h-3.5 text-prism-emerald" />
             <span>Private keys stay 100% in your local browser context.</span>
           </span>
-          <span className="text-prism-emerald font-bold">Midnight Testnet</span>
+          <span className="text-prism-emerald font-bold">Midnight Preprod</span>
         </div>
 
       </div>

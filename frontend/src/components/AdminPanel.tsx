@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserPlus, KeyRound, Check, Database, ShieldAlert, Cpu } from 'lucide-react';
+import { UserPlus, KeyRound, Check, Database, ShieldAlert, Cpu, Download, Sparkles, Layers, RefreshCw } from 'lucide-react';
 import { computeCommitment } from '../../../contract';
 
 interface AdminPanelProps {
@@ -19,6 +19,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [newSalt, setNewSalt] = useState(defaultSalt);
   const [isAdding, setIsAdding] = useState(false);
   const [lastAddedIndex, setLastAddedIndex] = useState<number | null>(null);
+  const [adminKey, setAdminKey] = useState('admin_secret_key_12345');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,9 +35,25 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   };
 
+  const handleBatchSample = async () => {
+    setIsAdding(true);
+    try {
+      const sampleSecrets = [
+        `secret_tier1_institutional_fund_${Math.floor(Math.random() * 9000 + 1000)}`,
+        `secret_governance_council_delegate_${Math.floor(Math.random() * 9000 + 1000)}`,
+      ];
+      for (const s of sampleSecrets) {
+        await onAddCredential(s, defaultSalt);
+      }
+      setLastAddedIndex(credentialCount + sampleSecrets.length - 1);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   return (
     <div className="cyber-card-purple p-6 rounded-3xl space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
         <div className="flex items-center space-x-3">
           <div className="p-3 rounded-2xl bg-prism-purple/10 border border-prism-purple/40 text-prism-purple shadow-prism-purple">
             <UserPlus className="w-6 h-6" />
@@ -55,10 +72,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       </div>
 
       {/* Admin Secret Registration Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
         <div>
-          <label className="block text-xs font-mono text-slate-300 mb-1.5 flex items-center justify-between">
-            <span className="font-semibold text-white">New Member Secret Identifier / Passport Hash</span>
+          <label className="block text-slate-300 mb-1.5 flex items-center justify-between">
+            <span className="font-bold text-white">New Member Secret Identifier / Passport Hash</span>
             <span className="text-slate-500 text-[10px]">Private Off-Chain Witness</span>
           </label>
           <div className="relative">
@@ -80,46 +97,58 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <Database className="w-3.5 h-3.5 text-prism-purple" />
               <span>Calculated Commitment Hash: sha256(secret || salt)</span>
             </div>
-            <div className="text-prism-purple truncate font-bold text-sm">
+            <div className="text-prism-purple truncate font-bold text-sm select-all">
               0x{computeCommitment(newSecret, newSalt)}
             </div>
-            <p className="text-[10px] text-slate-500 pt-0.5">
+            <p className="text-[10px] text-slate-500 pt-0.5 font-sans">
               Only this cryptographic hash digest is merged into the Merkle root on the ledger. User secrets never leave local RAM.
             </p>
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={!newSecret || isAdding}
-          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-prism-purple via-purple-600 to-indigo-600 hover:opacity-95 disabled:opacity-50 text-white font-mono text-sm font-extrabold shadow-prism-purple transition-all duration-300 flex items-center justify-center space-x-2"
-        >
-          {isAdding ? (
-            <span>Updating Contract Merkle Root...</span>
-          ) : (
-            <>
-              <UserPlus className="w-4 h-4" />
-              <span>Issue &amp; Commit Credential to Ledger</span>
-            </>
-          )}
-        </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <button
+            type="submit"
+            disabled={!newSecret || isAdding}
+            className="py-3.5 px-4 rounded-2xl bg-gradient-to-r from-prism-purple via-purple-600 to-indigo-600 hover:opacity-95 disabled:opacity-50 text-white font-mono text-sm font-extrabold shadow-prism-purple transition-all duration-300 flex items-center justify-center space-x-2"
+          >
+            {isAdding ? (
+              <span>Updating Merkle Root...</span>
+            ) : (
+              <>
+                <UserPlus className="w-4 h-4" />
+                <span>Issue &amp; Commit to Ledger</span>
+              </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleBatchSample}
+            disabled={isAdding}
+            className="py-3.5 px-4 rounded-2xl bg-cyber-950 hover:bg-cyber-900 border border-prism-purple/40 text-prism-purple font-mono text-xs font-bold transition-all flex items-center justify-center gap-2"
+          >
+            <Layers className="w-4 h-4" />
+            <span>+ Batch Issue 2 Sample Passes</span>
+          </button>
+        </div>
       </form>
 
       {/* Success Banner */}
       {lastAddedIndex !== null && (
-        <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-prism-emerald/40 text-xs font-mono text-prism-emerald flex items-center space-x-2">
+        <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-prism-emerald/40 text-xs font-mono text-prism-emerald flex items-center space-x-2 animate-fade-in">
           <Check className="w-4 h-4 shrink-0" />
           <span>Credential commitment successfully committed to Midnight ledger root at index #{lastAddedIndex}!</span>
         </div>
       )}
 
       {/* Current Root Display */}
-      <div className="p-4 rounded-2xl bg-cyber-950 border border-slate-800 font-mono text-xs space-y-1.5">
+      <div className="p-4 rounded-2xl bg-cyber-950 border border-slate-800 font-mono text-xs space-y-2">
         <div className="flex items-center justify-between text-slate-400 text-[11px]">
           <span>Current Public Ledger Merkle Root</span>
           <Cpu className="w-3.5 h-3.5 text-prism-purple" />
         </div>
-        <div className="text-prism-purple text-[11px] break-all bg-cyber-900/90 p-2.5 rounded-xl border border-slate-850 font-bold">
+        <div className="text-prism-purple text-[11px] break-all bg-cyber-900/90 p-2.5 rounded-xl border border-slate-850 font-bold select-all">
           {currentRoot}
         </div>
       </div>

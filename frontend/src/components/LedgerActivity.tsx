@@ -16,7 +16,7 @@ export const LedgerActivity: React.FC<LedgerActivityProps> = ({ history }) => {
         </div>
         <div className="flex items-center space-x-1.5 text-[11px] font-mono text-prism-emerald font-bold">
           <Radio className="w-3.5 h-3.5 animate-ping" />
-          <span>Midnight Testnet Live</span>
+          <span>Midnight Preprod Live</span>
         </div>
       </div>
 
