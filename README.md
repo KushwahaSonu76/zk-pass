@@ -19,7 +19,7 @@
 
 > **Network:** Midnight Preprod
 > **Contract Address:** `45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011`
-> **Explorer URL:** [https://preprod.midnight.network/contract/45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011](https://preprod.midnight.network/contract/45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011)
+> **Explorer URL:** [https://preprod.midnight.network/contract/45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011](https://preprod.midnightexplorer.com/contracts/0x45da95ddda479777d41c23f56ec87ce41cc779d6fc017e3bb994d1e3d6193011)
 ---
 
 ## Problem Statement
