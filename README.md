@@ -235,6 +235,12 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
 
 ---
 
+## 📋 Community Feedback Form
+
+📝 Google Feedback & Testing Form: [https://forms.gle/AFNuvuMbon4JdSo58](https://forms.gle/AFNuvuMbon4JdSo58)
+
+---
+
 ## Project Structure
 
 ```text
