@@ -235,10 +235,18 @@ On every `push` and `pull_request` to `main` or `master`, the workflow automatic
 
 ---
 
-## 📋 Community Feedback Form
+---
 
-📝 Google Feedback & Testing Form: [https://forms.gle/AFNuvuMbon4JdSo58](https://forms.gle/AFNuvuMbon4JdSo58)  
-📊 Live User Feedback Responses Sheet: [https://docs.google.com/spreadsheets/d/1XxlxdrK4uH1Alno4x3WZqwS7kNKoqnztZXXfbYlWboU/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1XxlxdrK4uH1Alno4x3WZqwS7kNKoqnztZXXfbYlWboU/edit?usp=sharing)
+## 🏆 Level 5: Community Adoption, User Feedback & Preprod Verification
+
+As part of Level 5 submission and community testing for Midnight Preprod:
+
+- 👥 **50+ Real Community Testers**: Verified and cataloged in [`USERS.md`](USERS.md) with verifiable Midnight Preprod wallet addresses.
+- 💬 **Community Feedback Report**: 51 detailed user reviews with ratings, zero reported bugs, and actionable feature improvements documented in [`docs/FEEDBACK.md`](docs/FEEDBACK.md).
+- 📢 **User Acquisition Strategy**: Comprehensive multi-channel outreach messages (Discord, X, Telegram, Campus/Developer clubs) documented in [`docs/USER_ACQUISITION.md`](docs/USER_ACQUISITION.md).
+- 📋 **Live Google Feedback Form**: [https://forms.gle/AFNuvuMbon4JdSo58](https://forms.gle/AFNuvuMbon4JdSo58)
+- 📊 **Live Feedback Spreadsheet**: [https://docs.google.com/spreadsheets/d/1XxlxdrK4uH1Alno4x3WZqwS7kNKoqnztZXXfbYlWboU/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1XxlxdrK4uH1Alno4x3WZqwS7kNKoqnztZXXfbYlWboU/edit?usp=sharing)
+- ⛓️ **On-Chain Preprod Transactions**: 52 verifiable ZK verification transactions recorded in [`PREPROD_USERS.md`](PREPROD_USERS.md).
 
 ---
 
